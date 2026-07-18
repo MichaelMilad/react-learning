@@ -1,0 +1,69 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: sans-serif;
+	color: #343a40;
+	line-height: 1;
+}
+
+.accordion {
+	width: 700px;
+	margin: 100px auto;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.item {
+	/* Opaque card on its own stacking layer. Without these, each item's 30px
+	   shadow bleeds into the 24px gap and is painted over by the neighbouring
+	   (transparent) item, so some shadows look missing. */
+	background-color: #fff;
+	position: relative;
+	z-index: 0;
+
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+	padding: 20px 24px;
+	padding-right: 48px;
+	cursor: pointer;
+	border-top: 4px solid #fff;
+	border-bottom: 4px solid #fff;
+
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	column-gap: 24px;
+	row-gap: 32px;
+	align-items: center;
+}
+
+.number {
+	font-size: 24px;
+	font-weight: 500;
+	color: #ced4da;
+}
+
+.title,
+.icon {
+	font-size: 24px;
+	font-weight: 500;
+}
+
+.content-box {
+	grid-column: 2 / -1;
+	padding-bottom: 16px;
+	line-height: 1.6;
+}
+
+/* OPEN STATE */
+.open {
+	border-top: 4px solid #087f5b;
+}
+
+.open .number,
+.open .text {
+	color: #087f5b;
+}

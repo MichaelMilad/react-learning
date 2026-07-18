@@ -27,7 +27,7 @@ export default function SkillList() {
 	return (
 		<div className='skill-list'>
 			{skills.map((s) => (
-				<Skill {...s} />
+				<Skill key={s.skill} {...s} />
 			))}
 		</div>
 	);
