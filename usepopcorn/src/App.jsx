@@ -56,9 +56,22 @@ const tempWatchedData = [
 	},
 ];
 
+function Test() {
+	const [tes, setTes] = useState(null);
+
+	return (
+		<div>
+			<StarRating color='blue' maxRating={10} onSetRating={setTes} />
+			{tes && <p>This movie was rated {tes} stars!</p>}
+		</div>
+	);
+}
+
 export default function App() {
 	const [movies, setMovies] = useState(tempMovieData);
 	const [watched, setWatched] = useState(tempWatchedData);
+
+	const messages = ['Very Bad', 'Bad', 'Okay', 'Good', 'Admirable'];
 
 	return (
 		<>
@@ -76,7 +89,9 @@ export default function App() {
 					<WatchedMovieList watched={watched} />
 				</Box>
 			</Main> */}
-			<StarRating />
+			<StarRating maxRating={5} messages={messages} />
+			<StarRating maxRating={10} color='red' size={24} defaultRating={5} />
+			<Test />
 		</>
 	);
 }
