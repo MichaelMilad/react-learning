@@ -16,19 +16,19 @@ export function Box({ children }) {
 	);
 }
 
-export function MovieList({ movies }) {
+export function MovieList({ movies, onSelect }) {
 	return (
-		<ul className='list'>
+		<ul className='list list-movies'>
 			{movies?.map((movie) => (
-				<Movie key={movie.imdbID} movie={movie} />
+				<Movie key={movie.imdbID} movie={movie} onSelect={onSelect} />
 			))}
 		</ul>
 	);
 }
 
-export function Movie({ movie }) {
+export function Movie({ movie, onSelect }) {
 	return (
-		<li>
+		<li onClick={() => onSelect(movie.imdbID)}>
 			<img src={movie.Poster} alt={`${movie.Title} poster`} />
 			<h3>{movie.Title}</h3>
 			<div>

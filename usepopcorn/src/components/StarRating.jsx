@@ -63,7 +63,7 @@ export default function StarRating({
 					);
 				})}
 			</div>
-			<p style={textStyle}>{ratingTitles[currentRating - 1] || 'N/A'}</p>
+			<p style={textStyle}>{ratingTitles[currentRating - 1] || ''}</p>
 		</div>
 	);
 }

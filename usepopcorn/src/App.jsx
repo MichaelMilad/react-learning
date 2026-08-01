@@ -1,97 +1,91 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 import NavBar, { NumResults, Search } from './components/NavBar';
 import Main, {
 	Box,
 	MovieList,
-	WatchedBox,
 	WatchedMovieList,
 	WatchedSummary,
 } from './components/Main';
-import StarRating from './components/StarRating';
-
-const tempMovieData = [
-	{
-		imdbID: 'tt1375666',
-		Title: 'Inception',
-		Year: '2010',
-		Poster:
-			'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-	},
-	{
-		imdbID: 'tt0133093',
-		Title: 'The Matrix',
-		Year: '1999',
-		Poster:
-			'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
-	},
-	{
-		imdbID: 'tt6751668',
-		Title: 'Parasite',
-		Year: '2019',
-		Poster:
-			'https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg',
-	},
-];
-
-const tempWatchedData = [
-	{
-		imdbID: 'tt1375666',
-		Title: 'Inception',
-		Year: '2010',
-		Poster:
-			'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-		runtime: 148,
-		imdbRating: 8.8,
-		userRating: 10,
-	},
-	{
-		imdbID: 'tt0088763',
-		Title: 'Back to the Future',
-		Year: '1985',
-		Poster:
-			'https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-		runtime: 116,
-		imdbRating: 8.5,
-		userRating: 9,
-	},
-];
-
-function Test() {
-	const [tes, setTes] = useState(null);
-
-	return (
-		<div>
-			<StarRating color='blue' maxRating={10} onSetRating={setTes} />
-			{tes && <p>This movie was rated {tes} stars!</p>}
-		</div>
-	);
-}
+import Loader from './components/Loader';
+import ErrorMessage from './components/ErrorMessage';
+import MovieDetails from './components/MovieDetails';
 
 export default function App() {
-	const [movies, setMovies] = useState(tempMovieData);
-	const [watched, setWatched] = useState(tempWatchedData);
+	const [movies, setMovies] = useState([]);
+	const [watched, setWatched] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
+	const [query, setQuery] = useState('');
+	const [selectedId, setSelectedId] = useState(null);
 
-	const messages = ['Very Bad', 'Bad', 'Okay', 'Good', 'Admirable'];
+	useEffect(() => {
+		const fetchMovies = async () => {
+			try {
+				setIsLoading(true);
+				const res = await axios.get(
+					`http://www.omdbapi.com/?apikey=1499b5ef&s=${query}`,
+				);
+
+				if (res.data.Error === 'Movie not found!')
+					throw new Error('Movie Not Found!');
+
+				setMovies(res.data.Search);
+				setError(null);
+			} catch (error) {
+				let message = 'Oops !, an Error happened while loading the movies';
+				if (error.message === 'Movie Not Found!') message = error.message;
+				setError(message);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		if (!query || query.length < 4) {
+			setMovies([]);
+			setError(null);
+		} else {
+			fetchMovies();
+		}
+	}, [query]);
+
+	function handleSelectMovie(id) {
+		setSelectedId(id === selectedId ? null : id);
+	}
 
 	return (
 		<>
-			{/* <NavBar>
-				<Search />
-				<NumResults movies={movies} />
+			<NavBar>
+				<Search query={query} setQuery={setQuery} />
+				<NumResults movies={movies || []} />
 			</NavBar>
 			<Main>
 				<Box>
-					<MovieList movies={movies} />
+					{!isLoading && !error && (
+						<MovieList movies={movies} onSelect={handleSelectMovie} />
+					)}
+					{isLoading && !error && <Loader />}
+					{!isLoading && error && <ErrorMessage message={error} />}
 				</Box>
 
 				<Box>
-					<WatchedSummary watched={watched} />
-					<WatchedMovieList watched={watched} />
+					{selectedId ? (
+						<MovieDetails
+							selectedId={selectedId}
+							setSelectedMovie={setSelectedId}
+						/>
+					) : (
+						<>
+							<WatchedSummary watched={watched} />
+							<WatchedMovieList watched={watched} />
+						</>
+					)}
 				</Box>
-			</Main> */}
-			<StarRating maxRating={5} messages={messages} />
+			</Main>
+			{/* <StarRating maxRating={5} messages={messages} />
 			<StarRating maxRating={10} color='red' size={24} defaultRating={5} />
-			<Test />
+			<Test /> */}
 		</>
 	);
 }
