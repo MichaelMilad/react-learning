@@ -1,20 +1,15 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import NavBar, { NumResults, Search } from './components/NavBar';
-import Main, {
-	Box,
-	MovieList,
-	WatchedMovieList,
-	WatchedSummary,
-} from './components/Main';
-import Loader from './components/Loader';
-import ErrorMessage from './components/ErrorMessage';
-import MovieDetails from './components/MovieDetails';
+import NavBar from './components/NavBar';
+import Search from './components/Search';
+import NumResults from './components/NumResults';
+import Main from './components/Main';
+import ListBox from './components/ListBox';
+import WatchedBox from './components/WatchedBox';
 
 export default function App() {
 	const [movies, setMovies] = useState([]);
-	const [watched, setWatched] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [query, setQuery] = useState('');
@@ -61,31 +56,14 @@ export default function App() {
 				<NumResults movies={movies || []} />
 			</NavBar>
 			<Main>
-				<Box>
-					{!isLoading && !error && (
-						<MovieList movies={movies} onSelect={handleSelectMovie} />
-					)}
-					{isLoading && !error && <Loader />}
-					{!isLoading && error && <ErrorMessage message={error} />}
-				</Box>
-
-				<Box>
-					{selectedId ? (
-						<MovieDetails
-							selectedId={selectedId}
-							setSelectedMovie={setSelectedId}
-						/>
-					) : (
-						<>
-							<WatchedSummary watched={watched} />
-							<WatchedMovieList watched={watched} />
-						</>
-					)}
-				</Box>
+				<ListBox
+					movies={movies}
+					isLoading={isLoading}
+					error={error}
+					onSelect={handleSelectMovie}
+				/>
+				<WatchedBox selectedId={selectedId} setSelectedId={setSelectedId} />
 			</Main>
-			{/* <StarRating maxRating={5} messages={messages} />
-			<StarRating maxRating={10} color='red' size={24} defaultRating={5} />
-			<Test /> */}
 		</>
 	);
 }
