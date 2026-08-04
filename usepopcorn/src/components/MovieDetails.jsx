@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import StarRating from './StarRating';
 
@@ -21,6 +21,12 @@ export default function MovieDetails({
 		Director: director,
 		Genre: genre,
 	} = movie;
+
+	useEffect(() => {
+		document.title = `Movie | ${title}`;
+
+		return () => (document.title = 'usePopcorn');
+	}, []);
 
 	movie.userRating = userRating;
 

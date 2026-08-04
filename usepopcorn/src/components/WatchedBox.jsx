@@ -17,11 +17,16 @@ export default function WatchedBox({ selectedId, setSelectedId }) {
 	const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
 
 	useEffect(() => {
+		const controller = new AbortController();
+
 		async function getMovieDetails() {
 			try {
 				setIsLoading(true);
 				const res = await axios.get(
 					`http://www.omdbapi.com/?apikey=1499b5ef&i=${selectedId}`,
+					{
+						signal: controller.signal,
+					},
 				);
 
 				setSelectedMovie(res.data);
@@ -38,6 +43,8 @@ export default function WatchedBox({ selectedId, setSelectedId }) {
 		if (selectedId) {
 			getMovieDetails();
 		}
+
+		return () => controller.abort();
 	}, [selectedId]);
 
 	function handleAddWatchedMovie() {
