@@ -53,7 +53,6 @@ export default function MovieDetails({
 					</p>
 				</div>
 			</header>
-			s
 			<section>
 				<div className='rating'>
 					{!isWatched ? (

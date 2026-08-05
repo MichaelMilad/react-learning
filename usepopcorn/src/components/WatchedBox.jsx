@@ -9,7 +9,10 @@ import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 
 export default function WatchedBox({ selectedId, setSelectedId }) {
-	const [watched, setWatched] = useState([]);
+	const [watched, setWatched] = useState(() => {
+		const storedValue = localStorage.getItem('watched');
+		return JSON.parse(storedValue);
+	});
 	const [selectedMovie, setSelectedMovie] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -47,8 +50,13 @@ export default function WatchedBox({ selectedId, setSelectedId }) {
 		return () => controller.abort();
 	}, [selectedId]);
 
+	useEffect(() => {
+		localStorage.setItem('watched', JSON.stringify(watched));
+	}, [watched]);
+
 	function handleAddWatchedMovie() {
 		setWatched([...watched, selectedMovie]);
+
 		setSelectedId(null);
 	}
 
