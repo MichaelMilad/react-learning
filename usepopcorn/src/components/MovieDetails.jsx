@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import StarRating from './StarRating';
+import { useKey } from '../hooks/useKey';
 
 export default function MovieDetails({
 	movie,
@@ -9,6 +10,10 @@ export default function MovieDetails({
 	isWatched,
 }) {
 	const [userRating, setUserRating] = useState(null);
+
+	const countRef = useRef(0);
+
+	useKey(onBack, 'Escape');
 
 	const {
 		Title: title,
@@ -26,12 +31,22 @@ export default function MovieDetails({
 		document.title = `Movie | ${title}`;
 
 		return () => (document.title = 'usePopcorn');
-	}, []);
+	}, [title]);
 
-	movie.userRating = userRating;
+	useEffect(() => {
+		if (userRating) {
+			countRef.current++;
+		}
+	}, [userRating]);
 
 	function handleSetRating(rating) {
 		setUserRating(rating);
+	}
+
+	function handleAddMovie() {
+		movie.userRating = userRating;
+		movie.userRatingCounter = countRef.current;
+		onAddWatched();
 	}
 
 	return (
@@ -66,7 +81,7 @@ export default function MovieDetails({
 							<button
 								disabled={!userRating}
 								className='btn-add'
-								onClick={() => onAddWatched(movie)}
+								onClick={handleAddMovie}
 							>
 								Add to List
 							</button>
