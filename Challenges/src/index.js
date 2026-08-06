@@ -8,7 +8,8 @@ import { createRoot } from 'react-dom/client';
 // import App from './challenges/4-Flash-Cards/App'
 // import App from './challenges/4-Flash-Cards/App';
 // import App from './challenges/Accordion Component/App';
-import App from './challenges/5-Currency-Converter/App';
+// import App from './challenges/5-Currency-Converter/App';
+import App from './challenges/6-useGeolocate/App';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
