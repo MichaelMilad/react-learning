@@ -1,5 +1,10 @@
 import { useReducer } from 'react';
 
+const initialState = {
+	count: 0,
+	step: 1,
+};
+
 function reducer(state, action) {
 	// if (action.type === 'inc') return state + 1;
 	// if (action.type === 'dec') return state - 1;
@@ -22,10 +27,6 @@ function reducer(state, action) {
 }
 
 export default function DateCounter() {
-	const initialState = {
-		count: 0,
-		step: 1,
-	};
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	const { count, step } = state;
