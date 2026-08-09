@@ -7,13 +7,17 @@ export default function Options({ question, dispatch, answer }) {
 			});
 	}
 
+	const hasAnswer = answer !== null;
+
 	return (
 		<div className='options'>
 			{question.options.map((option, index) => {
 				return (
 					<button
 						key={option}
-						className={`btn btn-option ${index === answer ? 'answer' : ''} ${index === question.correctOption ? 'correct' : 'wrong'}`}
+						disabled={hasAnswer}
+						className={`btn btn-option ${index === answer ? 'answer' : ''}
+							${hasAnswer ? (index === question.correctOption ? 'correct' : 'wrong') : ''}`}
 						onClick={handleSubmitAnswer(index)}
 					>
 						{option}
