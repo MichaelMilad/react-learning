@@ -1,15 +1,28 @@
-export default function NextButton({ dispatch, answer }) {
+export default function NextButton({
+	dispatch,
+	answer,
+	current,
+	questionsCount,
+}) {
 	if (answer === null) return null;
 
+	const isLastQuestion = current + 1 === questionsCount;
+
 	function handleNext() {
-		dispatch({
+		if (isLastQuestion) {
+			return dispatch({
+				type: 'finish',
+			});
+		}
+
+		return dispatch({
 			type: 'next',
 		});
 	}
 
 	return (
 		<button className='btn btn-ui' onClick={handleNext}>
-			Next
+			{isLastQuestion ? 'Finish' : 'Next'}
 		</button>
 	);
 }
