@@ -9,6 +9,8 @@ import Question from './Question';
 import NextButton from './NextButton';
 import Progress from './Progress';
 import FinishedScreen from './FinishedScreen';
+import Footer from './Footer';
+import Timer from './Timer';
 
 const initialState = {
 	questions: [],
@@ -58,6 +60,14 @@ function reducer(state, action) {
 				status: 'finished',
 				highscore: Math.max(state.score, state.highscore),
 			};
+		case 'restart': {
+			return {
+				...initialState,
+				questions: state.questions,
+				status: 'ready',
+				highscore: state.highscore,
+			};
+		}
 		default:
 			throw new Error('Action unknown !');
 	}
@@ -69,8 +79,6 @@ export default function App() {
 
 	const questionsCount = questions.length;
 	const maxScore = questions.reduce((prev, next) => prev + next.points, 0);
-
-	console.log('MAX: ', maxScore);
 
 	useEffect(() => {
 		let timeoutId = null;
@@ -120,12 +128,15 @@ export default function App() {
 							dispatch={dispatch}
 							answer={answer}
 						/>
-						<NextButton
-							dispatch={dispatch}
-							answer={answer}
-							questionsCount={questionsCount}
-							current={current}
-						/>
+						<Footer>
+							<Timer dispatch={dispatch} />
+							<NextButton
+								dispatch={dispatch}
+								answer={answer}
+								questionsCount={questionsCount}
+								current={current}
+							/>
+						</Footer>
 					</>
 				)}
 				{status === 'finished' && (
@@ -133,6 +144,7 @@ export default function App() {
 						score={score}
 						maxScore={maxScore}
 						highscore={highscore}
+						dispatch={dispatch}
 					/>
 				)}
 			</Main>

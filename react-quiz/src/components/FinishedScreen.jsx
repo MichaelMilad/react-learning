@@ -1,4 +1,4 @@
-function FinishedScreen({ score, maxScore, highscore }) {
+function FinishedScreen({ score, maxScore, highscore, dispatch }) {
 	const percentage = (score / maxScore) * 100;
 
 	let emoji;
@@ -8,6 +8,12 @@ function FinishedScreen({ score, maxScore, highscore }) {
 	if (percentage >= 0 && percentage < 50) emoji = '🤨';
 	if (percentage === 0) emoji = '🤦‍♂️';
 
+	function handleRestart() {
+		dispatch({
+			type: 'restart',
+		});
+	}
+
 	return (
 		<>
 			<p className='result'>
@@ -16,6 +22,9 @@ function FinishedScreen({ score, maxScore, highscore }) {
 				{percentage.toFixed(2)}%)
 			</p>
 			<p className='highscore'>(Highscore: {highscore} points)</p>
+			<button className='btn btn-ui' onClick={handleRestart}>
+				Restart
+			</button>
 		</>
 	);
 }

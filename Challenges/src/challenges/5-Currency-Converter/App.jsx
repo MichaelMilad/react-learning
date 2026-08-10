@@ -24,7 +24,6 @@ export default function App() {
 				`https://api.frankfurter.dev/v1/latest?amount=${query}&from=${currencyFrom}&to=${currencyTo}`,
 			).then(async (res) => {
 				const json = await res.json();
-				console.log(json);
 				setOutput(json.rates[currencyTo]);
 			});
 		};
