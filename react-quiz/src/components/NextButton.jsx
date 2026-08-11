@@ -1,9 +1,8 @@
-export default function NextButton({
-	dispatch,
-	answer,
-	current,
-	questionsCount,
-}) {
+import { useQuiz } from '../contexts/QuizContext';
+
+export default function NextButton() {
+	const { answer, current, questionsCount, dispatch } = useQuiz();
+
 	if (answer === null) return null;
 
 	const isLastQuestion = current + 1 === questionsCount;

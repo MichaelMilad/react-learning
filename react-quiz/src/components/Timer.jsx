@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useQuiz } from '../contexts/QuizContext';
 
 function formatTime(totalSeconds) {
 	const minutes = Math.floor(totalSeconds / 60);
@@ -11,8 +12,9 @@ function formatTime(totalSeconds) {
 	return `${paddedMinutes}:${paddedSeconds}`;
 }
 
-export default function Timer({ dispatch }) {
-	const [timer, setTimer] = useState(10);
+export default function Timer() {
+	const { dispatch } = useQuiz();
+	const [timer, setTimer] = useState(5 * 60);
 
 	const formattedTime = formatTime(timer);
 

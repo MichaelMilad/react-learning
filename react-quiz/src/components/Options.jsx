@@ -1,4 +1,9 @@
-export default function Options({ question, dispatch, answer }) {
+import { useQuiz } from '../contexts/QuizContext';
+
+export default function Options() {
+	const { questions, current, answer, dispatch } = useQuiz();
+	const question = questions[current];
+
 	function handleSubmitAnswer(val) {
 		return () =>
 			dispatch({
