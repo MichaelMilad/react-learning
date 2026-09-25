@@ -1,0 +1,19 @@
+{
+    "tasks": [
+        {
+            "id": 1,
+            "name": "Setup the project",
+            "status": "done"
+        },
+        {
+            "id": 2,
+            "name": "Use React Queries",
+            "status": "in-progress"
+        },
+        {
+            "id": 3,
+            "name": "Filtering",
+            "status": "todo"
+        }
+    ]
+}
